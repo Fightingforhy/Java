@@ -11,7 +11,6 @@ import java.awt.event.KeyListener;
 import java.io.*;
 import java.util.Date;
 import java.lang.String;
-import java.util.TreeSet;
 
 class VimFile3 extends JFrame {
     boolean judge = false;
@@ -38,7 +37,6 @@ class VimFile3 extends JFrame {
         int a, b;
         this.setTitle("Vim");
         textArea = new JTextArea();
-        textArea.setTabSize(9);
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textField = new JTextField();
@@ -64,6 +62,7 @@ class VimFile3 extends JFrame {
             thread.start();
         }
     }
+
     //文件操作
     public class FileTest1 {
         //保存文件
@@ -123,9 +122,9 @@ class VimFile3 extends JFrame {
                 case JFileChooser.ERROR_OPTION:
                     System.out.println("保存文件出错");
                     break;
-            }//swith语句结束
-        }//saveAs方法结束
-    }//类FileTest1结束
+            }
+        }
+    }
 
     //键盘按键监听
     public class KeyListenerTest1 implements KeyListener {
@@ -204,6 +203,8 @@ class VimFile3 extends JFrame {
                         } else {
                             setPosition = textArea.getLineEndOffset(row) - 1;
                         }
+
+
                     } else {
                         if (row == 1) {
                             setPosition = textArea.getCaretPosition() + textArea.getLineEndOffset(row - 1);
@@ -293,7 +294,7 @@ class VimFile3 extends JFrame {
                 textArea.insert("\r\n", textArea.getCaretPosition());
                 textArea.insert(copy, textArea.getCaretPosition());
             }
-            //实现在文本框输入/键用新字符串替换文本中已知字符串或者匹配字符串
+            //实现在文本框输入/键用新字符串替换文本中已知字符串
             if (keyChar == '/' && judge == false) {
                 int x=0;String stf=textField.getText();
                 for(int i=0;i<stf.length();i++){
@@ -301,8 +302,7 @@ class VimFile3 extends JFrame {
                         x++;
                     }
                 }
-                //替换字符串
-                if(x==2){
+                if(x>=2){
                     String s1 = null;
                     String s2 = null;
                     String[] sf = new String[3];
@@ -324,9 +324,7 @@ class VimFile3 extends JFrame {
                             textArea.append(sr[i]);
                         }
                     }
-                    System.out.println("替换成功");
                 }
-                //匹配字符串
                 if(x==1){
                     String[] spoint=textField.getText().split("/");
                     String point=spoint[1];
@@ -334,33 +332,14 @@ class VimFile3 extends JFrame {
                     String[] sr=textArea.getText().split("\n");
                     for(int i=0;i<sr.length;i++){
                         if(sr[i].contains(point)){
-                            int n=i+1;
-                            int p=0,q=0;
-                            int pointLocation=0;
-                            try{
-                                pointLocation=textArea.getLineEndOffset(i-1);
-                            }catch (Exception ex){ ex.printStackTrace();}
-                            if(i==0){
-                                p=sr[i].indexOf(point);
-                                q=p+point.length();
-                            }
-                            else{
-                                p=sr[i].indexOf(point)+pointLocation;
-                                q=p+point.length();
-                            }
-                            System.out.println(p+" "+q);
-                            textArea.setSelectionStart(p);
-                            textArea.setSelectionEnd(q);
-                            textArea.setSelectedTextColor(Color.GREEN);
-                            textArea.setSelectionColor(Color.black);
-                            System.out.println(textArea.getSelectedText().toUpperCase());
-                            System.out.println("第"+ n +"行包含字符串:'"+point+"'");
-                        }//if语句结束
-                    }//for循环结束
-                }//if语句结束
-            }//if语句结束
-        }//keyReleased方法结束
-    }//类KeyListenerTest1结束
+                            SimpleAttributeSet set = new SimpleAttributeSet();
+                            StyleConstants.setFontSize(set,20);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     //每隔30秒保存一次文件
     public class MyRunnable implements Runnable {
@@ -375,7 +354,8 @@ class VimFile3 extends JFrame {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }//while循环结束
-        }//run()方法结束
-    }//类MyRunnable结束
+            }
+        }
+    }
+
 }
